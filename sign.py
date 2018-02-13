@@ -30,7 +30,7 @@ def GetTBS(kw , BDUSS):
 def SignIn(kw , BDUSS):
 
 	url = "http://c.tieba.baidu.com/c/c/forum/sign"
-
+	#create arguments for the sign in post
 	fid = GetFID(kw)
 	tbs = GetTBS(kw , BDUSS)
 	parameter="BDUSS=" + BDUSS + "&fid=" + fid + "&kw=" + kw + "&tbs=" +tbs + "&sign="
@@ -41,6 +41,9 @@ def SignIn(kw , BDUSS):
 	sign = str(signMD5.hexdigest()).upper()
 	parameter += sign
 	
-	thisRequest = urllib.request.urlopen(url,data=bytes(parameter,"utf8"))	
-	response = str(thisRequest.read())
+	Headers = {"User-Agent" : "bdtb for Android 8.0"}
+
+	thisRequest = urllib.request.Request(url,headers=Headers,data=bytes(parameter,"utf8"))
+	thisRequest = urllib.request.urlopen(thisRequest)	
+	response = thisRequest.read().decode("unicode-escape")  #This is the first time I saw such a type "unicode-escape".
 	return response

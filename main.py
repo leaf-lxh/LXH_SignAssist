@@ -1,4 +1,5 @@
 import sign
 
-print (sign.GetFID("bilibili"))
+BDUSS = input("Your BDUSS is :")
+print (sign.SignIn("bilibili",BDUSS))
 

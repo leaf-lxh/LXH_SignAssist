@@ -1,5 +1,6 @@
 import sign
 import urllib.request
+import time
 
 def GetILikeList(BDUSS,STOKEN):
 
@@ -11,8 +12,7 @@ def GetILikeList(BDUSS,STOKEN):
 		  }
 	thisRequest = urllib.request.Request(url,headers=Headers)
 	thisRequest = urllib.request.urlopen(thisRequest)
-	response = str(thisRequest.read().decode("gbk"))
-	print(response)	
+	response = str(thisRequest.read().decode("gbk"))	
 	#check the web source ,see if there has data that we need
 	if response.find(r'" title="') != -1 :
 		isStill = True
@@ -37,3 +37,16 @@ def GetILikeList(BDUSS,STOKEN):
 		if response.find(r'" title="',pB) == -1 :
 			break	
 	return ILikeList
+
+
+def SignAll(BDUSS,STOKEN):
+	
+	ILikeList = GetILikeList(BDUSS,STOKEN)
+	IkwList = []
+	
+	for kw,lev in ILikeList.items():
+		print (kw)
+		sign.SignIn(kw,BDUSS)
+		time.sleep(10)#The interval time of each sign in is 10 seconds.
+
+	print ("complete")		

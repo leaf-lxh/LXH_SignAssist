@@ -1,5 +1,8 @@
-import sign
+import task
 
-BDUSS = input("Your BDUSS is :")
-print (sign.SignIn("bilibili",BDUSS))
+BDUSS = input("Your BDUSS is:")
+STOKEN = input("Your STOKEN is:")
+print (task.SignAll(BDUSS,STOKEN))
+
+
 

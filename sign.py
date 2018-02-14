@@ -1,9 +1,10 @@
 import urllib.request
+import urllib.parse
 import hashlib
 
 def GetFID(kw):
-
-	url="http://tieba.baidu.com/f/commit/share/fnameShareApi?ie=utf-8&fname=" + str(kw)
+	
+	url="http://tieba.baidu.com/f/commit/share/fnameShareApi?ie=utf-8&fname=" + urllib.parse.quote(str(kw))
 	thisRequest = urllib.request.urlopen(url)
 	Response = thisRequest.read()
 	PositionA = str(Response).find(r'"fid":')
@@ -14,7 +15,7 @@ def GetFID(kw):
 
 def GetTBS(kw , BDUSS):
 
-	url="http://tieba.baidu.com/mo/m?kw=" + str(kw)
+	url="http://tieba.baidu.com/mo/m?kw=" + urllib.parse.quote(str(kw))
 	Headers = {	
 			"User-Agent" : "bdtb for Android 8.0",
 			"Cookie" : "BDUSS=" + BDUSS
@@ -28,7 +29,7 @@ def GetTBS(kw , BDUSS):
 	return response[PositionA:PositionB]
 
 def SignIn(kw , BDUSS):
-
+		
 	url = "http://c.tieba.baidu.com/c/c/forum/sign"
 	#create arguments for the sign in post
 	fid = GetFID(kw)
@@ -40,6 +41,8 @@ def SignIn(kw , BDUSS):
 	signMD5.update(sign.encode("utf8"))
 	sign = str(signMD5.hexdigest()).upper()
 	parameter += sign
+#	parameter = urllib.parse.quote(parameter)
+	print(parameter)
 	
 	Headers = {"User-Agent" : "bdtb for Android 8.0"}
 

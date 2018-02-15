@@ -41,10 +41,13 @@ def SignIn(kw , BDUSS):
 	signMD5.update(sign.encode("utf8"))
 	sign = str(signMD5.hexdigest()).upper()
 	parameter += sign
-#	parameter = urllib.parse.quote(parameter)
+	parameter = parameter.replace('+',"%2B") #urlencode problem, urlencode will convert '+' to ' '
 	print(parameter)
 	
-	Headers = {"User-Agent" : "bdtb for Android 8.0"}
+	Headers = {
+			"User-Agent" : "bdtb for Android 8.0",
+			"Content-Type" : "application/x-www-form-urlencoded"	
+		  }
 
 	thisRequest = urllib.request.Request(url,headers=Headers,data=bytes(parameter,"utf8"))
 	thisRequest = urllib.request.urlopen(thisRequest)	

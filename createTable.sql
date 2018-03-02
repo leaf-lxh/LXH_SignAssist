@@ -8,6 +8,5 @@ create table baidu_user_info
 	BDUSS TEXT(300) not null,
 	TIEBA_STOKEN TEXT(200) not null,
 	TIEBA_USERNAME char(20) not null,
-	DAY_LASTSIGNIN int not null,
 	E_MAIL TEXT(200) 
 );

@@ -6,7 +6,7 @@ import MySQLQuery
 import urllib.request
 import time
 import threading
-
+import os
 
 def WriteLog(string):
 	logPath = "/var/log/lxh"

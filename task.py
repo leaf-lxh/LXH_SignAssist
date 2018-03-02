@@ -8,7 +8,8 @@ import time
 import threading
 
 
-def WriteLog(logPath = "/var/log/lxh"):
+def WriteLog():
+	logPath = "/var/log/lxh"
 	try:
 		with open(logPath+"/output.log","a") as fileObject:
 			fileObject.write(time.asctime(time.localtime(time.time())) + "  ")
@@ -21,7 +22,8 @@ def WriteLog(logPath = "/var/log/lxh"):
 			pass
 		WriteLog(string)
 
-def ReadConfig(configPath = "/etc/lxh"):
+def ReadConfig():
+	configPath = "/etc/lxh"
 	config = {
 			"hour" : 1,
 			"minute" :0

@@ -7,6 +7,7 @@ import urllib.request
 import time
 import threading
 import os
+import json
 
 def WriteLog(string):
 	logPath = "/var/log/lxh"

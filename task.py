@@ -1,8 +1,26 @@
 #task.py
+#!python3
+# coding: utf-8
 import sign
+import MySQLQuery
 import urllib.request
 import time
 import threading
+
+logPath = "/var/log/lxh"
+
+def WriteLog(string):
+	try:
+		with open(logPath+"/output.log","a") as fileObject:
+			fileObject.write(time.asctime(time.localtime(time.time())) + "  ")
+			fileObject.write(string)
+			fileObject.write("\n")
+	except:
+		if os.path.isdir(logPath) == False:
+			os.mkdir(logPath)
+		with open(logPath+"/output.log","w") as fileObject:
+			pass
+		WriteLog(string)
 
 class SignInTask:
 
@@ -50,19 +68,18 @@ class SignInTask:
 	def SignAll(self):
 		
 		ILikeList = self.GetILikeList()
-		
 		for kw,lev in ILikeList.items():
 			print (kw)
-			sign.SignIn(kw,self.BDUSS)
+			WriteLog(sign.SignIn(kw,self.BDUSS))
+			
 			time.sleep(10)#The interval of each sign in is 10 seconds.
-	
-		print ("sign in all complete")		
 
 class AutoSignInThread(threading.Thread) :# Inherit form threading.Thread 
 	
-	def __init__(self,when,accounts):
+	def __init__(self,when,MySQLUserName,MySQLpassword):
 		self.when = when
-		self.accounts = accounts
+		self.user = MySQLUserName
+		self.passwd = MySQLpassword
 		self.isEnabled = False
 		threading.Thread.__init__(self)
 		
@@ -78,12 +95,19 @@ class AutoSignInThread(threading.Thread) :# Inherit form threading.Thread
 			self.todayDay = (time.localtime(time.time()))[2]
 			if self.lastSignInDay != self.todayDay :
 				
-				if self.when["hour"] == (time.localtime(time.time()))[3] :
-					
-					if self.when["minutes"] == (time.localtime(time.time()))[4]:
-					
-						sign = SignInTask(self.accounts["BDUSS"],self.accounts["STOKEN"])
-						sign.SignAll()
+				if self.when["hour"] == (time.localtime(time.time()))[3] :	
+					if self.when["minute"] == (time.localtime(time.time()))[4]:
+						sql = MySQLQuery.MySQLOperate("localhost",self.user,self.passwd)
+						id = 1
+						while True:
+							UserInfo=sql.QueryUserInfo(id)
+							print(UserInfo)
+							if UserInfo == None:
+								break
+							sign = SignInTask(UserInfo["BDUSS"],UserInfo["STOKEN"])
+							sign.SignAll()
+							id+=1
+							WriteLog("%s has sign in"%(UserInfo["NAME"]))
 						self.lastSignInDay = self.todayDay
-			
-			time.sleep(60)
+			WriteLog("Thread is running....")
+			time.sleep(30)

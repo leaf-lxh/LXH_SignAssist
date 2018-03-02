@@ -50,10 +50,10 @@ def main():
 		if os.path.isdir(configPath) == False:
 			os.mkdir(configPath)	
 		with open(configPath+"/config.json",'w') as fileObject:
-			while config["hour"]<0 and config["hour"]>23:
-				config["hour"] = input("Sign in hour is :(0-23)")
-			while config["minute"]<0 and config["minute"]>59:
-				config["minute"] = input("Sign in minute is :(0-59)")
+			while config["hour"]<0 or config["hour"]>23:
+				config["hour"] = int(input("Sign in hour is :(0-23)"))
+			while config["minute"]<0 or config["minute"]>59:
+				config["minute"] = int(input("Sign in minute is :(0-59)"))
 			jsonData = json.dumps(config)
 			fileObject.write(jsonData)
 

@@ -8,7 +8,7 @@ import time
 import threading
 
 
-def WriteLog():
+def WriteLog(string):
 	logPath = "/var/log/lxh"
 	try:
 		with open(logPath+"/output.log","a") as fileObject:

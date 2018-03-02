@@ -7,9 +7,8 @@ import urllib.request
 import time
 import threading
 
-logPath = "/var/log/lxh"
 
-def WriteLog(string):
+def WriteLog(logPath = "/var/log/lxh"):
 	try:
 		with open(logPath+"/output.log","a") as fileObject:
 			fileObject.write(time.asctime(time.localtime(time.time())) + "  ")
@@ -21,6 +20,27 @@ def WriteLog(string):
 		with open(logPath+"/output.log","w") as fileObject:
 			pass
 		WriteLog(string)
+
+def ReadConfig(configPath = "/etc/lxh"):
+	config = {
+			"hour" : 1,
+			"minute" :0
+		 }
+	try:
+		with open(configPath+"/config.json",'r') as fileObject: #open() file and finally close()
+			rawConfig = fileObject.read()    #read data
+			if rawConfig != "":              #if file is not empty, transform data to dictionary
+				config = json.loads(rawConfig)
+				return config
+			else:
+				raise RuntimeError("config file is empty")
+	except : #if file is not exist or json data is not standard
+		if os.path.isdir(configPath) == False:
+			os.mkdir(configPath)
+		with open(configPath+"/config.json",'w') as fileObject:
+			jsonData = json.dumps(config)
+			fileObject.write(jsonData)
+			return config
 
 class SignInTask:
 
@@ -94,7 +114,7 @@ class AutoSignInThread(threading.Thread) :# Inherit form threading.Thread
 			
 			self.todayDay = (time.localtime(time.time()))[2]
 			if self.lastSignInDay != self.todayDay :
-				
+				self.when = ReadConfig()
 				if self.when["hour"] == (time.localtime(time.time()))[3] :	
 					if self.when["minute"] == (time.localtime(time.time()))[4]:
 						sql = MySQLQuery.MySQLOperate("localhost",self.user,self.passwd)

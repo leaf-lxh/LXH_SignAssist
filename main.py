@@ -35,18 +35,25 @@ def main():
 	
 	task.WriteLog("process start")
 	config = {
-			"hour" : 1,
-			"minute" :0
+			"hour" : -1,
+			"minute" :-1
 	 	}
 	try:
 		with open(configPath+"/config.json",'r') as fileObject: #open() file and finally close()
 			rawConfig = fileObject.read()    #read data
 			if rawConfig != "":              #if file is not empty, transform data to dictionary
-				config = json.loads(rawConfig)
+				config = json.loads(rawConfig) 
+			else:
+				raise RuntimeError("config file is empty")
+				
 	except : #if file is not exist or json data is not standard
 		if os.path.isdir(configPath) == False:
 			os.mkdir(configPath)	
 		with open(configPath+"/config.json",'w') as fileObject:
+			while config["hour"]<0 and config["hour"]>23:
+				config["hour"] = input("Sign in hour is :(0-23)")
+			while config["minute"]<0 and config["minute"]>59:
+				config["minute"] = input("Sign in minute is :(0-59)")
 			jsonData = json.dumps(config)
 			fileObject.write(jsonData)
 

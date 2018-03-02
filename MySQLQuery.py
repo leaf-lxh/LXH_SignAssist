@@ -75,13 +75,13 @@ class MySQLOperate:
 		key = 0
 		if BDUSS != None:
 			statement+='BDUSS=%s'%(BDUSS)
-			++key
+			key+=1
 		if STOKEN != None:
 			statement+=',STOKEN=%s'%(STOKEN)
-			++key
+			key+=1
 		if E_MAIL != None:
 			statement+=',E_MAIL=%s'%(E_MAIL)
-			++key
+			key+=1
 		if key == 0:
 			return
 		statement +='WHERE TIEBA_USERNAME=%s'%(USERNAME)

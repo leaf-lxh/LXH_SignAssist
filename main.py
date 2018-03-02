@@ -1,58 +1,68 @@
-#main.py
-import task
-import sign
-import json
+#!python3
+# coding:utf-8
+
 import os
+import sys
+import json
+import time
+import task
+import MySQLQuery
 
-myInfo ={}
-if os.path.isfile("/etc/LXH_SignAssist/config.json") ==False:
-	if os.path.exists("/etc/LXH_SignAssist") ==False:
-		os.mkdir("/etc/LXH_SignAssist")
-	os.mknod("/etc/LXH_SignAssist/config.json")
-configFile = open("/etc/LXH_SignAssist/config.json","r+")
 
-configData = configFile.read()
- 
-if configData == "" :
-	print("Your config file is empty. Let's make a set up.")
-	myInfo["BDUSS"] = input("Your BDUSS is:")
-	myInfo["STOKEN"] = input("Your STOKEN is:")
-	jsonData = json.dumps(myInfo)
-	configFile.write(jsonData)
-	configFile.close()
-	print("Set up complete.Data saved.")
-else :
-	myInfo = json.loads(configData)
-		
-Task =task.SignInTask(myInfo["BDUSS"],myInfo["STOKEN"]) #Initialize SignInTask instance
+configPath = "/etc/lxh"
 
-while True:
-	print (
-"""[1]Sign in one bar
-[2]Sign in all
-[3]Set up automatic sign in
-[4]Disable automatic sign in"""
-		)
-	thisResult = int(input("What you want today:"))
-	if thisResult == 1:
-		kw = input("The kw is:")
-		print(sign.SignIn(kw,myInfo["BDUSS"]))
-	if thisResult == 2:
-		print ("Signning...")
-		Task.SignAll()
-	if thisResult == 3:
-		when = {}
-		print ("When you want me to sign in everyday?/n")
-		when["hour"] = int(input("The hour is:(0-23)"))
-		while when["hour"]<0 or when["hour"]>23 :
-			print("given value out of the range")
-			when["hour"] = int(input("The hour is:(0-23)")) 
-		
-		when["minutes"] = int(input("The minutes is:(0-59)"))
-		while when["minutes"]<0 or when["minutes"]>59 :
-			print ("given value out of the range")
-			when["minutes"] = int(input("The minutes is:(0-59)"))	
-		Thread = task.AutoSignInThread(when,myInfo)
-		Thread.start()
-	if thisResult == 4 :
-		print("stoped")#Task.SetAutoSignInStop()
+def daemonInit():
+	try:
+		pid = os.fork()
+		if pid > 0 :
+			os._exit(0)
+	except:
+		task.WriteLog("fork failed,process exit...")
+
+	os.setsid()
+	os.chdir("/")
+	os.umask(0)
+	
+	
+	with open("/dev/null", 'rb', 0) as f:
+		os.dup2(f.fileno(), sys.stdin.fileno())
+	with open("/dev/null", 'ab', 0) as f:
+		os.dup2(f.fileno(), sys.stdout.fileno())
+	with open("/dev/null", 'ab', 0) as f:
+		os.dup2(f.fileno(), sys.stderr.fileno())
+	task.WriteLog("daemon process creation complete with pid %d"%(os.getpid()))
+def main():
+	
+	task.WriteLog("process start")
+	config = {
+			"hour" : 1,
+			"minute" :0
+	 	}
+	try:
+		with open(configPath+"/config.json",'r') as fileObject: #open() file and finally close()
+			rawConfig = fileObject.read()    #read data
+			if rawConfig != "":              #if file is not empty, transform data to dictionary
+				config = json.loads(rawConfig)
+	except : #if file is not exist or json data is not standard
+		if os.path.isdir(configPath) == False:
+			os.mkdir(configPath)	
+		with open(configPath+"/config.json",'w') as fileObject:
+			jsonData = json.dumps(config)
+			fileObject.write(jsonData)
+
+	task.WriteLog("config reading complete")
+	user = input("MySQL username is :")
+	password = input("password is:")
+	test = MySQLQuery.MySQLOperate("localhost",user,password)
+	if test.Connect() == None:
+		print("Connect to MySQL failed.Try to check your username,password,your database name and table name")
+		print("process exit")
+		os._exit(0)
+	print ("connect to database success,process is switching to background")
+	daemonInit()
+	
+	Thread = task.AutoSignInThread(config,user,password)
+	Thread.start()
+	
+
+main()

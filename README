@@ -15,8 +15,8 @@ About specific mean of some arguments:
 
 
 TODO: 
-	1.Use mariadb to store data.
-	2.Sign in user data sourse mariadb supports
+	#1.Use mariadb to store data.
+	#2.Sign in user data sourse mariadb supports
 	3.Send e-mail to user when sign in failure happens.
-	4.Initialize mariadb supports
-	4.daemon process
+	#4.Initialize mariadb supports
+	#4.daemon process

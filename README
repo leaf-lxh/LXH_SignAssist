@@ -1,4 +1,4 @@
-LXH_SignAssist is a python script running on CentOS 7. 
+ # LXH_SignAssist is a python script running on CentOS 7. 
 
 Usage:
 	It can sign in baidu tieba for you automaticly.
@@ -7,7 +7,7 @@ Usage:
 
 
 Install:
-	*1. install git : # yum -y install git
+	 * 1. install git : # yum -y install git
 	*2.download source code :# git clone https://github.com/leaf-lxh/LXH_SignAssist.git	
 	*3. install python3 : 
 About specific mean of some arguments:

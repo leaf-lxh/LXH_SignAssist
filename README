@@ -6,7 +6,10 @@ Usage:
 	Multiple accounts are supported.  It uses mariadb to save user info.
 
 
-	
+Install:
+	*1. install git : # yum -y install git
+	*2.download source code :# git clone https://github.com/leaf-lxh/LXH_SignAssist.git	
+	*3. install python3 : 
 About specific mean of some arguments:
 	kw: the name of the bar
 	fid: the bar id in number form

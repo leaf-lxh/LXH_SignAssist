@@ -71,5 +71,5 @@ def main():
 	Thread = task.AutoSignInThread(config,user,password)
 	Thread.start()
 	
-
-main()
+if __name__ == "__main__":
+	main()

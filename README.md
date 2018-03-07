@@ -7,9 +7,9 @@
 
 
  ### Install:
- -  * install git `# yum -y install git`
- -  * download source code `#git clone https://github.com/leaf-lxh/LXH_SignAssist.git' 
- -  * use Python 3.x to run main.py
+ - install git `# yum -y install git`
+ - download source code `# git clone https://github.com/leaf-lxh/LXH_SignAssist.git' 
+ - use Python 3.x to run main.py
 
  ### TODO: 
  - (done)1.Use mariadb to store data.
@@ -20,5 +20,5 @@
 
  ### Files:
 >There are some files will be created will this script is running
- -  * Log: /var/log/lxh/output.log
- -  * Config: /etc/lxh/config.json
+ - Log: /var/log/lxh/output.log
+ - Config: /etc/lxh/config.json

@@ -8,7 +8,7 @@
 
  ### Install:
  - install git `# yum -y install git`
- - download source code `# git clone https://github.com/leaf-lxh/LXH_SignAssist.git' 
+ - download source code `# git clone https://github.com/leaf-lxh/LXH_SignAssist.git` 
  - use Python 3.x to run main.py
 
  ### TODO: 

@@ -1,4 +1,6 @@
- # LXH_SignAssist is a python script running on CentOS 7. 
+# Outdated. You can check out [misaka_network/auto_sign_in](https://github.com/leaf-lxh/misaka_network/tree/master/auto_sign_in) for getting a more reliable auto sign in.
+
+# LXH_SignAssist
 
  ### Usage:
  - It can sign in baidu tieba for you automaticly.
